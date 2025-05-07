@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:15  # Официальный образ PostgreSQL 15
+    container_name: postgres  # Имя контейнера
+    hostname: postgres  # Имя хоста
+    ports:
+      - "5433:5432"  # Проброс порта
+    environment:
+      POSTGRES_USER: postgres  # Логин
+      POSTGRES_PASSWORD: postgres  # Пароль
+      POSTGRES_DB: userdb  # Имя БД
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Том для хранения данных
+
+volumes:
+  postgres-data:  # Том для данных PostgreSQL
