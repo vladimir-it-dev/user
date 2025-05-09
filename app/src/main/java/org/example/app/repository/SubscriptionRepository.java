@@ -19,4 +19,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
             "ORDER BY usersCount DESC " +
             "LIMIT 3")
     List<Object[]> findTop3PopularSubscriptions();
+
+    boolean existsByUserIdAndSubscriptionName(Long idUser, String subscriptionName);
 }

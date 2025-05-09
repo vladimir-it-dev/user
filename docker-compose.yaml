@@ -11,6 +11,32 @@ services:
       POSTGRES_DB: userdb  # Имя БД
     volumes:
       - postgres-data:/var/lib/postgresql/data  # Том для хранения данных
+    networks:
+      - app-network  # Подключение к сети app-network
+
+  app:
+    container_name: users-subscriptions  # Имя контейнера
+    build:
+      context: .  # Сборка из текущей директории
+    ports:
+      - "8080:8080"  # Проброс порта приложения
+    volumes:
+      - ./logs:/app/logs  # Монтирование директории с логами
+    depends_on:
+      - postgres  # Зависимости от других сервисов
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/userdb  # URL БД
+      SPRING_DATASOURCE_USERNAME: postgres  # Логин БД
+      SPRING_DATASOURCE_PASSWORD: postgres  # Пароль БД
+      SPRING_FLYWAY_URL: jdbc:postgresql://postgres:5432/userdb  # URL для Flyway
+      SPRING_FLYWAY_USER: postgres  # Логин Flyway
+      SPRING_FLYWAY_PASSWORD: postgres  # Пароль Flyway
+    networks:
+      - app-network  # Подключение к сети app-network
+
+networks:
+  app-network:
+    driver: bridge  # Создание bridge-сети для контейнеров
 
 volumes:
   postgres-data:  # Том для данных PostgreSQL

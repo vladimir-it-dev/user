@@ -6,15 +6,45 @@ spring:
     date-format: yyyy-MM-dd'T'HH:mm:ss  # Формат даты для JSON
     time-zone: UTC  # Часовой пояс UTC
   datasource:
-    url: jdbc:postgresql://localhost:5433/userdb  # URL основной БД
+    url: jdbc:postgresql://postgres:5432/userdb  # URL основной БД
     username: postgres  # Пользователь основной БД
     password: postgres  # Пароль основной БД
     driver-class-name: org.postgresql.Driver  # Драйвер PostgreSQL
+  flyway:
+    enabled: true  # Включение Flyway
+    user: postgres  # Пользователь БД для Flyway
+    password: postgres  # Пароль для Flyway
+    url: jdbc:postgresql://postgres:5432/userdb  # URL БД для Flyway
+    locations: classpath:db/migration  # Расположение миграций
   jpa:
     hibernate:
-      ddl-auto: update  # Режим работы Hibernate (валидация схемы)
+      ddl-auto: validate  # Режим работы Hibernate (валидация схемы)
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect  # Диалект PostgreSQL
         format_sql: true  # SQL в логах
     show-sql: true  # Показывать SQL в логах
+
+logging:
+  level:
+    org.springframework.cache: TRACE  # Уровень логирования для кэша
+    org.hibernate.SQL: DEBUG  # Уровень логирования SQL запросов
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Уровень логирования параметров SQL
+    root: INFO  # Общий уровень логирования
+    org.springframework: INFO  # Уровень логирования Spring
+    org.example.app: INFO  # Уровень логирования приложения
+  file:
+    name: app/logs/application.log  # Путь к файлу логов
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # Формат логов в файле
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # Формат логов в консоли
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html  # Путь к Swagger UI
+    enabled: true  # Включение Swagger UI
+    tagsSorter: alpha  # Сортировка тегов по алфавиту
+    operationsSorter: alpha  # Сортировка операций по алфавиту
+  api-docs:
+    path: /api-docs  # Путь к OpenAPI спецификации
+    version: openapi_3_1  # Версия OpenAPI
